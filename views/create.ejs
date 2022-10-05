@@ -1,0 +1,68 @@
+<html lang="en">
+  <style>
+    .btn {
+      white-space: nowrap;
+      text-align: center;
+    }
+  </style>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <nav class="navbar bg-light">
+      <div class="container-fluid d-flex justify-content-between">
+        <a class="navbar-brand" style="font-size: 7vmin" href="/"
+          >Time Tasks To Do</a
+        >
+        <form class="d-flex mx-5 w-25" role="login">
+          <div class="row mx-1">
+            <label for="Username" class="form-label" style="margin-left: 8px"
+              >Username</label
+            >
+            <input
+              class="form-control form-control-sm"
+              placeholder="Username"
+              aria-label="Username"
+            />
+          </div>
+          <div class="row mx-1">
+            <label for="Username" class="form-label" style="margin-left: 8px"
+              >Password</label
+            >
+            <input
+              class="form-control form-control-sm"
+              placeholder="Password"
+              aria-label="Password"
+            />
+          </div>
+          <div style="position: relative">
+            <button
+              class="btn btn-sm btn-outline-success"
+              type="submit"
+              style="position: absolute; bottom: 0px"
+            >
+              Log In
+            </button>
+          </div>
+        </form>
+      </div>
+    </nav>
+    <div class="container"></div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
