@@ -70,7 +70,7 @@ app.get("/", (req, res) => {
 app.get("/mainpage", (req, res) => {
   Task.find()
     .then((result) => {
-      res.render("mainpage", { title: "Home", tasks: result });
+      res.render("mainpage", { title: "Home", login: login, tasks: result });
     })
     .catch((err) => {
       console.log(err);

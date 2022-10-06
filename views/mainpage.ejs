@@ -9,7 +9,15 @@
 
   <body>
     <%- include('./partials/nav.ejs') %>
-    <div class="container"></div>
+    <div class="container">
+      <% if (tasks.length>0) { %> <% tasks.forEach(task =>{ %>
+      <a class="single" href="/blogs/<%= task._id %> ">
+        <h3 class="date_deadline"><%= task.date_deadline %></h3>
+        <h4 class="title"><%= task.task %></h4> </a
+      ><% }) %> <% } else { %>
+      <h2>Add your first task...</h2>
+      <% } %>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
