@@ -27,6 +27,7 @@ const page = function (login) {
 };
 
 // middleware & static files
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // routes
@@ -39,7 +40,7 @@ app.get("/mainpage", (req, res) => {
       let dates = [];
       result.forEach(function (result) {
         if (!dates.includes(result.date_deadline)) {
-          date.push(result.date_deadline);
+          dates.push(result.date_deadline);
         }
       });
       console.log(dates.sort());
@@ -65,6 +66,7 @@ app.get("/mainpage/create", (req, res) => {
 });
 // mongoose and mongo sandbox routes
 app.post("/mainpage", (req, res) => {
+  req.body.finished = false;
   const task = new Task(req.body);
 
   task
@@ -78,7 +80,11 @@ app.get("/mainpage/:id", (req, res) => {
   const id = req.params.id;
   Task.findById(id)
     .then((result) => {
-      res.render("details", { title: "Task Details", task: result });
+      res.render("details", {
+        title: "Task Details",
+        task: result,
+        login: login,
+      });
     })
     .catch((err) => {
       console.log(err);

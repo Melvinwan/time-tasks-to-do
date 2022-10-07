@@ -9,13 +9,13 @@
         >
           <h4 class="title my-3"><%= task.task %></h4>
           <h4 class="priority my-3"></h4>
-          <% if (tasks.comments) { %>
+          <% if (task.comments) { %>
             <p class="comments my-3"><%= task.comments %></p>
             <% } %>
           <a class="delete border-danger" data.doc="<%= task._id  %> ">delete</a>
         </div>
 
-    <%- include("./partials/footer.ejs") %>
+    <!-- <%- include("./partials/footer.ejs") %> -->
 
     <script>
       const trashcan = document.querySelector("a.delete");

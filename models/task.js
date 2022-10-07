@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 const taskSchema = new Schema({
   date_deadline: {
-    type: Number,
+    type: String,
     required: true,
   },
-  time_deadline: { type: Number, required: false },
+  time_deadline: { type: String, required: false },
   task: {
     type: String,
     required: true,
