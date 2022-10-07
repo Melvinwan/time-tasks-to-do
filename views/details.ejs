@@ -1,6 +1,12 @@
 <html lang="en">
   <%- include("./partials/head.ejs") %>
-
+<style>.delete{
+    color: red;
+  }
+  .delete:hover{
+    cursor: pointer;
+    box-shadow: 1px 2px 3px rgba(0,0,0,0.2);
+  }</style>
   <body>
     <%- include("./partials/nav.ejs") %>
 
@@ -12,7 +18,7 @@
           <% if (task.comments) { %>
             <p class="comments my-3"><%= task.comments %></p>
             <% } %>
-          <a class="delete border-danger" data.doc="<%= task._id  %> ">delete</a>
+            <a class="delete" data-doc="<%=task._id %>">delete</a>
         </div>
 
     <!-- <%- include("./partials/footer.ejs") %> -->
@@ -21,12 +27,13 @@
       const trashcan = document.querySelector("a.delete");
       trashcan.addEventListener("click", (e) => {
         const endpoint = `/mainpage/${trashcan.dataset.doc}`;
+        console.log(endpoint)
         fetch(endpoint, {
           method: "DELETE",
         })
-          .then((response) => response.json())
-          .then((data) => (window.location.href = data.redirect))
-          .catch((err) => console.log(err));
+          .then((response) => response.json()).then((data) => (window.location.href = data.redirect)).catch((err) => console.log(err));
+
+
       });
     </script>
   </body>
