@@ -29,40 +29,6 @@ const page = function (login) {
 // middleware & static files
 app.use(morgan("dev"));
 
-// mongiise and mongo sandbox routes
-app.get("/add-task", (req, res) => {
-  const task = new Task({
-    date_deadline: 05102022,
-    task: "study",
-    priority: 2,
-    finished: false,
-  });
-
-  task
-    .save()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => console.log(err));
-});
-app.get("/all-blogs", (req, res) => {
-  Task.find()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-app.get("/single-blog", (req, res) => {
-  Task.findById("633d93f7b347f29b227a0c56")
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 // routes
 app.get("/", (req, res) => {
   res.render(page(login), { title: "Home", login: login });
@@ -70,7 +36,19 @@ app.get("/", (req, res) => {
 app.get("/mainpage", (req, res) => {
   Task.find()
     .then((result) => {
-      res.render("mainpage", { title: "Home", login: login, tasks: result });
+      let dates = [];
+      result.forEach(function (result) {
+        if (!dates.includes(result.date_deadline)) {
+          date.push(result.date_deadline);
+        }
+      });
+      console.log(dates.sort());
+      res.render("mainpage", {
+        title: "Home",
+        login: login,
+        tasks: result,
+        dates: dates.sort,
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -83,8 +61,39 @@ app.get("/about", (req, res) => {
   res.render("about", { title: "About", login: login });
 });
 app.get("/mainpage/create", (req, res) => {
-  res.redirect("create", { title: "Submit a new task", login: login });
+  res.render("create", { title: "Submit a new task", login: login });
 });
+// mongoose and mongo sandbox routes
+app.post("/mainpage", (req, res) => {
+  const task = new Task(req.body);
+
+  task
+    .save()
+    .then((result) => {
+      res.redirect("/mainpage");
+    })
+    .catch((err) => console.log(err));
+});
+app.get("/mainpage/:id", (req, res) => {
+  const id = req.params.id;
+  Task.findById(id)
+    .then((result) => {
+      res.render("details", { title: "Task Details", task: result });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+app.delete("/mainpage/:id", (req, res) => {
+  const id = req.params.id;
+
+  Task.findByIdAndDelete(id).then((result) => {
+    res.json({ redirect: "/mainpage" }).catch((err) => {
+      console.log(err);
+    });
+  });
+});
+
 app.use((req, res) => {
   res.status(404).render("404", { title: "404", login: login });
 });

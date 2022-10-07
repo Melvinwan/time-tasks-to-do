@@ -4,20 +4,52 @@
       white-space: nowrap;
       text-align: center;
     }
+    .btn-circle.btn-xl {
+			width: 100px;
+			height: 100px;
+			padding: 13px 18px;
+			border-radius: 60px;
+			font-size: 15px;
+			text-align: center;
+		}
   </style>
   <%- include('./partials/head.ejs') %>
 
   <body>
     <%- include('./partials/nav.ejs') %>
-    <div class="container">
+    <div class="container d-flex align-items-center justify-content-center"
+    style="height: 70vh">
       <% if (tasks.length>0) { %> <% tasks.forEach(task =>{ %>
-      <a class="single" href="/blogs/<%= task._id %> ">
-        <h3 class="date_deadline"><%= task.date_deadline %></h3>
-        <h4 class="title"><%= task.task %></h4> </a
+      <h3 class="date_deadline my-3"><%= task.date_deadline %></h3>
+      <a class="single" href="/mainpage/<%= task._id %> ">
+        <div
+          class="container border <%= task.finished?"border-dark": task.priority==1?"border-danger":task.priority==2?"border-warning":"border-light"  %> rounded"
+        >
+          <h4 class="title my-3"><%= task.task %></h4>
+          <h4 class="priority my-3"></h4>
+          <% if (tasks.comments) { %>
+            <p class="comments my-3"><%= task.comments %></p>
+            <% } %>
+          <a class="delete border-danger" data.doc="<%= task._id  %> ">delete</a>
+        </div> </a
       ><% }) %> <% } else { %>
       <h2>Add your first task...</h2>
       <% } %>
+      <a href="/mainpage/create"style="position: fixed; bottom: 20px;"><button type="button" class="btn btn-primary btn-circle btn-xl"
+      >Add<br />Task</button></a>
+
     </div>
+    <script>
+      const trashcan = document.querySelector('a.delete')
+
+      trashcan.addEventListener('click', (e)=>{
+        const endpoint = `/mainpage/${trashcan.dataset.doc}`
+
+        fetch(endpoint, {
+          method: 'DELETE'
+        }).then(()=>{}).catch(err => console.log(err))
+      })
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

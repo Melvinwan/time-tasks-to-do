@@ -6,6 +6,7 @@ const taskSchema = new Schema({
     type: Number,
     required: true,
   },
+  time_deadline: { type: Number, required: false },
   task: {
     type: String,
     required: true,
@@ -18,7 +19,7 @@ const taskSchema = new Schema({
     type: Boolean,
     required: true,
   },
-  comments: {
+  note: {
     type: String,
     required: false,
   },

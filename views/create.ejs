@@ -45,7 +45,91 @@
         </form>
       </div>
     </nav>
-    <div class="container"></div>
+    <div
+      class="container d-flex align-items-center justify-content-center"
+      style="height: 70vh"
+    >
+      <form action="/mainpage" method="POST">
+        <div class="my-2">
+          <label for="date_deadline">Deadline Date</label>
+          <input
+            id="date_deadline"
+            name="date_deadline"
+            class="form-control"
+            type="date"
+            required
+          />
+        </div>
+        <div class="my-2">
+          <label for="time_deadline">Select a specific time:</label>
+          <input
+            class="form-control"
+            name="time_deadline"
+            type="time"
+            id="InputTime"
+          />
+        </div>
+        <div class="form-group">
+          <label for="task">Task</label>
+          <input
+            type="Task"
+            class="form-control"
+            id="InputTask"
+            placeholder="Task"
+            name="task"
+            required
+          />
+        </div>
+        <label for="InputTask">Priority</label>
+        <div class="my-2">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="priority"
+              id="inlineRadio1"
+              value="1"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio1">1</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="priority"
+              id="inlineRadio2"
+              value="2"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio2">2</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="priority"
+              id="inlineRadio3"
+              value="3"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio3">3</label>
+          </div>
+        </div>
+
+        <div class="form-group my-2">
+          <label for="InputNote">Note</label>
+          <input
+            type="Note"
+            class="form-control"
+            id="InputNote"
+            placeholder="Note"
+            name="note"
+          />
+        </div>
+        <button type="addtask" class="btn btn-primary my-2">Add task</button>
+      </form>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
