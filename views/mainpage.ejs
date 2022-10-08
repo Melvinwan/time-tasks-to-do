@@ -21,7 +21,7 @@
     style="min-height: 70vh"><div class="col">
       <% if (tasks.length>0) { %> <% tasks.forEach(task =>{ %>
         <div class="col"><h3 class="date_deadline my-3"><%= task.date_deadline %></h3>
-      <a href="/mainpage/<%= task._id %> ">
+      <a style="text-decoration: none;" rel="Details click here" href="/mainpage/<%= task._id %> ">
         <div
           class="container border <%= task.finished?"border-dark": task.priority==1?"border-danger":task.priority==2?"border-warning":"border-light"  %> rounded"
         >
@@ -34,9 +34,9 @@
       ><% }) %> <% } else { %>
       <h2>Add your first task...</h2>
       <% } %>
-      <a href="/mainpage/create"style="position: fixed; bottom: 20px;"><button type="button" class="btn btn-primary btn-circle btn-xl"
+
+</div><a href="/mainpage/create"style="position: fixed; bottom: 20px;"><button type="button" class="btn btn-primary btn-circle btn-xl"
       >Add<br />Task</button></a>
-</div>
     </div>
 
     <!-- Optional JavaScript -->

@@ -3,7 +3,7 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const Task = require("./models/task");
 const { result } = require("lodash");
-
+const taskRoutes = require("./routes/taskRoutes");
 const app = express();
 
 const dbURI =
@@ -65,42 +65,7 @@ app.get("/mainpage/create", (req, res) => {
   res.render("create", { title: "Submit a new task", login: login });
 });
 // mongoose and mongo sandbox routes
-app.post("/mainpage", (req, res) => {
-  req.body.finished = false;
-  const task = new Task(req.body);
-
-  task
-    .save()
-    .then((result) => {
-      res.redirect("/mainpage");
-    })
-    .catch((err) => console.log(err));
-});
-app.get("/mainpage/:id", (req, res) => {
-  const id = req.params.id;
-  Task.findById(id)
-    .then((result) => {
-      res.render("details", {
-        title: "Task Details",
-        task: result,
-        login: login,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-app.delete("/mainpage/:id", (req, res) => {
-  const id = req.params.id;
-
-  Task.findByIdAndDelete(id)
-    .then((result) => {
-      res.json({ redirect: "/mainpage" });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+app.use(taskRoutes);
 
 app.use((req, res) => {
   res.status(404).render("404", { title: "404", login: login });
