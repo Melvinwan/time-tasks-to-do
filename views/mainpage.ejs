@@ -18,24 +18,25 @@
   <body>
     <%- include('./partials/nav.ejs') %>
     <div class="container d-flex align-items-center justify-content-center"
-    style="height: 70vh">
+    style="min-height: 70vh"><div class="col">
       <% if (tasks.length>0) { %> <% tasks.forEach(task =>{ %>
-      <h3 class="date_deadline my-3"><%= task.date_deadline %></h3>
-      <a class="single" href="/mainpage/<%= task._id %> ">
+        <div class="col"><h3 class="date_deadline my-3"><%= task.date_deadline %></h3>
+      <a href="/mainpage/<%= task._id %> ">
         <div
           class="container border <%= task.finished?"border-dark": task.priority==1?"border-danger":task.priority==2?"border-warning":"border-light"  %> rounded"
         >
           <h4 class="title my-3"><%= task.task %></h4>
           <h4 class="priority my-3"></h4>
-          <% if (tasks.comments) { %>
-            <p class="comments my-3"><%= task.comments %></p>
+          <% if (task.note) { %>
+            <p class="comments my-3"><%= task.note %></p></div>
+
             <% } %></div> </a
       ><% }) %> <% } else { %>
       <h2>Add your first task...</h2>
       <% } %>
       <a href="/mainpage/create"style="position: fixed; bottom: 20px;"><button type="button" class="btn btn-primary btn-circle btn-xl"
       >Add<br />Task</button></a>
-
+</div>
     </div>
 
     <!-- Optional JavaScript -->

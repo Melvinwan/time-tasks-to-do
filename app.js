@@ -43,7 +43,7 @@ app.get("/mainpage", (req, res) => {
           dates.push(result.date_deadline);
         }
       });
-      console.log(dates.sort());
+      console.log(result);
       res.render("mainpage", {
         title: "Home",
         login: login,
