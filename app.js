@@ -93,11 +93,13 @@ app.get("/mainpage/:id", (req, res) => {
 app.delete("/mainpage/:id", (req, res) => {
   const id = req.params.id;
 
-  Task.findByIdAndDelete(id).then((result) => {
-    res.json({ redirect: "/mainpage" }).catch((err) => {
+  Task.findByIdAndDelete(id)
+    .then((result) => {
+      res.json({ redirect: "/mainpage" });
+    })
+    .catch((err) => {
       console.log(err);
     });
-  });
 });
 
 app.use((req, res) => {
