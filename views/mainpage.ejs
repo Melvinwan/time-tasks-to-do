@@ -23,7 +23,7 @@
         <div class="col"><h3 class="date_deadline my-3"><%= task.date_deadline %></h3>
       <a style="text-decoration: none;" rel="Details click here" href="/mainpage/<%= task._id %> ">
         <div
-          class="container border <%= task.finished?"border-dark": task.priority==1?"border-danger":task.priority==2?"border-warning":"border-light"  %> rounded"
+          class="container border <%= task.finished?"border-dark": task.priority==1?"border-danger":task.priority==2?"border-warning":"border-success"  %> rounded"
         >
           <h4 class="title my-3"><%= task.task %></h4>
           <h4 class="priority my-3"></h4>

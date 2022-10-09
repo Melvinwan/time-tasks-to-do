@@ -1,11 +1,28 @@
-const express = require("express");
 const Task = require("../models/task");
 const login = require("../login");
 const taskController = require("../controllers/taskController");
+const task_mainpage = (req, res) => {
+  Task.find()
+    .then((result) => {
+      let dates = [];
+      result.forEach(function (result) {
+        if (!dates.includes(result.date_deadline)) {
+          dates.push(result.date_deadline);
+        }
+      });
+      res.render("mainpage", {
+        title: "Home",
+        login: login,
+        tasks: result,
+        dates: dates.sort,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
-const router = express.Router();
-// mongoose and mongo sandbox routes
-router.get("/:id", (req, res) => {
+const task_details = (req, res, login) => {
   const id = req.params.id;
   Task.findById(id)
     .then((result) => {
@@ -18,8 +35,9 @@ router.get("/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
     });
-});
-router.post("/", (req, res) => {
+};
+
+task_create_post = (req, res) => {
   req.body.finished = false;
   const task = new Task(req.body);
 
@@ -29,8 +47,9 @@ router.post("/", (req, res) => {
       res.redirect("/mainpage");
     })
     .catch((err) => console.log(err));
-});
-router.delete("/:id", (req, res) => {
+};
+
+const task_delete = (req, res) => {
   const id = req.params.id;
 
   Task.findByIdAndDelete(id)
@@ -40,6 +59,6 @@ router.delete("/:id", (req, res) => {
     .catch((err) => {
       console.log(err);
     });
-});
+};
 
-module.exports = router;
+module.exports = { task_mainpage, task_delete, task_details, task_create_post };

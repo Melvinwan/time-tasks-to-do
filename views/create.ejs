@@ -49,7 +49,7 @@
       class="container d-flex align-items-center justify-content-center"
       style="height: 70vh"
     >
-      <form action="/mainpage" method="POST">
+      <form action="/tasks" method="POST">
         <div class="my-2">
           <label for="date_deadline">Deadline Date</label>
           <input
@@ -80,7 +80,7 @@
             required
           />
         </div>
-        <label for="InputTask">Priority</label>
+        <label for="InputPriority">Priority</label>
         <div class="my-2">
           <div class="form-check form-check-inline">
             <input
@@ -133,6 +133,14 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script>
+      if (edit) {
+        document.getElementById("date_deadline").value = result.date_deadline;
+        document.getElementById("time_deadline").value = result.time_deadline;
+        document.getElementById("InputTask").value = result.task;
+        document.getElementById("InputNote").value = result.note;
+      }
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
