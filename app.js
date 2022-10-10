@@ -43,6 +43,7 @@ app.get("/mainpage/create", (req, res) => {
     title: "Submit a new task",
     login: login,
     edit: false,
+    task: {},
   });
 });
 

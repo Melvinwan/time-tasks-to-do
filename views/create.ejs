@@ -13,7 +13,7 @@
       style="height: 70vh"
     >
       <form
-        action="/mainpage/<%= edit&&("create/"+task._id)%>"
+        action="/mainpage/<%= edit?("create/"+task._id):""%>"
         method="POST"
       >
         <div class="my-2">
