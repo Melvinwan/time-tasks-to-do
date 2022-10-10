@@ -39,7 +39,11 @@ app.get("/about", (req, res) => {
   res.render("about", { title: "About", login: login });
 });
 app.get("/mainpage/create", (req, res) => {
-  res.render("create", { title: "Submit a new task", login: login });
+  res.render("create", {
+    title: "Submit a new task",
+    login: login,
+    edit: false,
+  });
 });
 
 app.use("/mainpage", taskRoutes);
