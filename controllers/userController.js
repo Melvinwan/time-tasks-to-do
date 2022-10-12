@@ -1,0 +1,1 @@
+exports.getSignupForm = (req, res);

@@ -4,11 +4,15 @@ const mongoose = require("mongoose");
 const Task = require("./models/task");
 const { result } = require("lodash");
 const taskRoutes = require("./routes/taskRoutes");
+const userRoutes = require("./routes/userRoutes");
 const login = require("./login");
 const app = express();
 const taskController = require("./controllers/taskController");
-const dbURI = require("./dbURL");
-
+const dbURL = require("./dbURL");
+mongoose
+  .connect(dbURL)
+  .then((result) => app.listen(3000))
+  .catch((err) => console.log(err));
 // register view engine
 app.set("view engine", "ejs");
 
@@ -28,7 +32,14 @@ app.get("/", (req, res) => {
 
 app.get("/mainpage", taskController.task_mainpage);
 app.get("/create_account", (req, res) => {
-  res.render("create_account", { title: "Log in", login: login });
+  res.render("create_account", {
+    title: "Log in",
+    login: login,
+    errors: false,
+    InputUsername: false,
+    InputPassword: false,
+    InputConfirmPassword: false,
+  });
 });
 app.get("/about", (req, res) => {
   res.render("about", { title: "About", login: login });
@@ -43,6 +54,7 @@ app.get("/mainpage/create", (req, res) => {
 });
 
 app.use("/mainpage", taskRoutes);
+app.use(userRoutes);
 
 app.use((req, res) => {
   res.status(404).render("404", { title: "404", login: login });
