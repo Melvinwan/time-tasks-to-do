@@ -35,10 +35,6 @@ app.get("/create_account", (req, res) => {
   res.render("create_account", {
     title: "Log in",
     login: login,
-    errors: false,
-    InputUsername: false,
-    InputPassword: false,
-    InputConfirmPassword: false,
   });
 });
 app.get("/about", (req, res) => {
