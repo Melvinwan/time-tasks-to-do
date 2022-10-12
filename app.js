@@ -7,12 +7,7 @@ const taskRoutes = require("./routes/taskRoutes");
 const login = require("./login");
 const app = express();
 const taskController = require("./controllers/taskController");
-const dbURI =
-  "mongodb+srv://melvinwan:Zim12345!@time-task-to-do.axails6.mongodb.net/?retryWrites=true&w=majority";
-mongoose
-  .connect(dbURI)
-  .then((result) => app.listen(3000))
-  .catch((err) => console.log(err));
+const dbURI = require("./dbURL");
 
 // register view engine
 app.set("view engine", "ejs");
