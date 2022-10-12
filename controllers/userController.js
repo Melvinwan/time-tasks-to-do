@@ -36,7 +36,15 @@ exports.postCreateaccount = (req, res, next) => {
         res.redirect("/mainpage");
       })
       .catch((err) => {
-        console.log(err);
+        errors.push({ msg: "Username already exist" });
+        res.render("create_account", {
+          errors,
+          InputUsername,
+          InputPassword,
+          InputConfirmPassword,
+          title: "Log in",
+          login: login,
+        });
       });
   }
 };
