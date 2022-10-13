@@ -19,19 +19,21 @@
     <%- include('./partials/nav.ejs') %>
     <div class="container d-flex align-items-center justify-content-center"
     style="min-height: 70vh"><div class="col">
-      <% if (tasks.length>0) { %> <% tasks.forEach(task =>{ %>
-        <div class="col"><h3 class="date_deadline my-3"><%= task.date_deadline %></h3>
-      <a style="text-decoration: none;" rel="Details click here" href="/mainpage/<%= task._id %> ">
+      <% if (typeof tasks != "undefined") { %> <% tasks.forEach(task =>{ %>
+        <div>
+          <h3 class="date_deadline my-3"><%= task._id %></h3>
+          <% task.results.forEach(result =>{ %>
+      <a style="text-decoration: none;" rel="Details click here" href="/mainpage/<%= result._id %> ">
         <div
-          class="container border <%= task.finished?"border-dark": task.priority==1?"border-danger":task.priority==2?"border-warning":"border-success"  %> rounded"
+          class="container border <%= result.finished?"border-dark": result.priority==1?"border-danger":result.priority==2?"border-warning":"border-success"  %> rounded"
         >
-          <h4 class="title my-3"><%= task.task %></h4>
+          <h4 class="title my-3"><%= result.task %></h4>
           <h4 class="priority my-3"></h4>
-          <% if (task.note) { %>
-            <p class="comments my-3"><%= task.note %></p></div>
+          <% if (result.note) { %>
+            <p class="comments my-3"><%= result.note %></p></div>
 
             <% } %></div> </a
-      ><% }) %> <% } else { %>
+      ><% })}) %> <% } else { %>
 
       <h2>Add your first task...</h2>
       <% } %>

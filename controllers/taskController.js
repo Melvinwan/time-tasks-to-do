@@ -1,26 +1,43 @@
 const Task = require("../models/task");
 const login = require("../login");
 const taskController = require("../controllers/taskController");
-const task_mainpage = (req, res) => {
-  Task.find()
-    .then((result) => {
-      let dates = [];
-      result.forEach(function (result) {
-        if (!dates.includes(result.date_deadline)) {
-          dates.push(result.date_deadline);
-        }
-      });
-      res.render("mainpage", {
-        title: "Home",
-        login: login,
-        req: req,
-        tasks: result,
-        dates: dates.sort,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
+const task_mainpage = async (req, res) => {
+  try {
+    const docs = await Task.aggregate([
+      { $match: { finished: false } },
+      {
+        $group: {
+          // Each `_id` must be unique, so if there are multiple
+          // documents with the same age, MongoDB will increment `count`.
+          _id: "$date_deadline",
+          count: { $sum: 1 },
+          results: {
+            $push: "$$ROOT",
+          },
+        },
+      },
+    ]);
+    res.render("mainpage", {
+      title: "Home",
+      login: login,
+      req: req,
+      tasks: docs,
     });
+  } catch (err) {
+    console.log(err);
+  }
+  // Task.find()
+  //   .then((result) => {
+  //     res.render("mainpage", {
+  //       title: "Home",
+  //       login: login,
+  //       req: req,
+  //       tasks: result,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
 const task_details = (req, res, login) => {

@@ -36,10 +36,8 @@ app.use((req, res, next) => {
 app.use(userRoutes);
 app.get("/", (req, res) => {
   if (typeof req.user != "undefined") {
-    console.log("YES");
     res.redirect("/mainpage");
   } else {
-    console.log("NO");
     res.render("index", { title: "Home", login: login, req: req });
   }
 });
