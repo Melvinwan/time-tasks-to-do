@@ -8,5 +8,6 @@ const router = express.Router();
 // Register Handle
 router.post("/create_account", userController.postCreateaccount);
 router.post("/", userController.login);
+router.post("/logout", userController.logout);
 
 module.exports = router;

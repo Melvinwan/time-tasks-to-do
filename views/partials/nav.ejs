@@ -3,7 +3,7 @@
     <a class="navbar-brand" style="font-size: 7vmin" href="/"
       >Time Tasks To Do</a
     >
-    <% if (!login) { %>
+    <% if (!req.user) { %>
     <form class="d-flex mx-5 w-25" role="login" action="/" method="POST">
       <div class="row mx-1">
         <label for="Username" class="form-label">Username</label>
@@ -35,6 +35,21 @@
         </button>
       </div>
     </form>
+    <% } else{%>
+    <div class="d-flex mx-5 w-25">
+      <div class="mx-3">
+        <p style="font-size: 2vw; text-transform: uppercase">
+          Hi 👋&nbsp;<%= req.user.username %>
+        </p>
+      </div>
+
+      <form action="/logout" method="POST">
+        <button class="btn btn-sm btn-outline-success" type="submit">
+          Log out
+        </button>
+      </form>
+    </div>
+
     <% } %>
   </div>
 </nav>

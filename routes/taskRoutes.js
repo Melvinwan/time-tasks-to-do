@@ -23,6 +23,7 @@ router.get("/:id", (req, res) => {
         title: "Task Details",
         task: result,
         login: login,
+        req: req,
         edit: true,
       });
     })
@@ -38,6 +39,7 @@ router.get("/create/:id", (req, res) => {
         title: "Edit",
         task: result,
         login: login,
+        req: req,
         edit: true,
       });
     })

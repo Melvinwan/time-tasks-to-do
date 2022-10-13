@@ -56,8 +56,8 @@ exports.postCreateaccount = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  var Username = req.body.Username;
-  var Password = req.body.Password;
+  const Username = req.body.Username;
+  const Password = req.body.Password;
 
   User.findOne({ $or: [{ username: Username }] }).then((user) => {
     if (user) {
@@ -66,18 +66,26 @@ exports.login = (req, res, next) => {
           console.log(err);
         }
         if (result) {
-          let token = jwt.sign({ username: user.name }, "verySecretValue", {
+          const token = jwt.sign(
+            { id: user._id, username: user.username, tasks: user.tasks },
+            "verySecretValue",
+            {
+              expiresIn: "1h",
+            }
+          );
+          res.cookie("token", token, {
             expiresIn: "1h",
           });
-          req.user = user;
           res.redirect("/");
-          next();
         } else {
-          alert("Password does not matched");
+          console.log("Password does not matched");
         }
       });
     } else {
-      alert("User not found");
+      console.log("User not found");
     }
   });
+};
+exports.logout = (req, res, next) => {
+  return res.clearCookie("token").then(res.redirect("/"));
 };

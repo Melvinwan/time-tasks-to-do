@@ -13,6 +13,7 @@ const task_mainpage = (req, res) => {
       res.render("mainpage", {
         title: "Home",
         login: login,
+        req: req,
         tasks: result,
         dates: dates.sort,
       });
@@ -30,6 +31,7 @@ const task_details = (req, res, login) => {
         title: "Task Details",
         task: result,
         login: login,
+        req: req,
       });
     })
     .catch((err) => {

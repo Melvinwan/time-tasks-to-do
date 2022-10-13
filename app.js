@@ -1,6 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const Task = require("./models/task");
 const User = require("./models/user");
 const { result } = require("lodash");
@@ -16,27 +18,29 @@ mongoose
   .catch((err) => console.log(err));
 // register view engine
 app.set("view engine", "ejs");
+app.use(cookieParser());
 
 // middleware & static files
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // routes
-// app.use((req, res, next) => {
-//   User.findById()
-//     .then((userInDB) => {
-//       req.user = userInDB;
-//       next();
-//     })
-//     .catch((err) => console.log(err));
-// });
-
+app.use((req, res, next) => {
+  const token = req.cookies.token;
+  if (typeof token != "undefined") {
+    const data = jwt.verify(token, "verySecretValue");
+    req.user = data;
+  }
+  next();
+});
 app.use(userRoutes);
 app.get("/", (req, res) => {
-  if (login) {
+  if (typeof req.user != "undefined") {
+    console.log("YES");
     res.redirect("/mainpage");
   } else {
-    res.render("index", { title: "Home", login: login });
+    console.log("NO");
+    res.render("index", { title: "Home", login: login, req: req });
   }
 });
 
@@ -45,15 +49,17 @@ app.get("/create_account", (req, res) => {
   res.render("create_account", {
     title: "Log in",
     login: login,
+    req: req,
   });
 });
 app.get("/about", (req, res) => {
-  res.render("about", { title: "About", login: login });
+  res.render("about", { title: "About", login: login, req: req });
 });
 app.get("/mainpage/create", (req, res) => {
   res.render("create", {
     title: "Submit a new task",
     login: login,
+    req: req,
     task: {},
   });
 });
