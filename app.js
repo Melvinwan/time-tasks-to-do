@@ -44,7 +44,7 @@ app.get("/", (req, res) => {
   }
 });
 
-app.get("/mainpage", taskController.task_mainpage);
+app.get("/mainpage", isLoggedIn, taskController.task_mainpage);
 app.get("/create_account", (req, res) => {
   res.render("create_account", {
     title: "Log in",
@@ -64,8 +64,15 @@ app.get("/mainpage/create", (req, res) => {
   });
 });
 
-app.use("/mainpage", taskRoutes);
+app.use("/mainpage", isLoggedIn, taskRoutes);
 
 app.use((req, res) => {
   res.status(404).render("404", { title: "404", login: login });
 });
+function isLoggedIn(req, res, next) {
+  // if user is authenticated in the session, carry on
+  if (typeof req.user != "undefined") return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect("/");
+}
