@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const Task = require("./models/task");
+const User = require("./models/user");
 const { result } = require("lodash");
 const taskRoutes = require("./routes/taskRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -21,7 +22,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 // routes
+// app.use((req, res, next) => {
+//   User.findById()
+//     .then((userInDB) => {
+//       req.user = userInDB;
+//       next();
+//     })
+//     .catch((err) => console.log(err));
+// });
 
+app.use(userRoutes);
 app.get("/", (req, res) => {
   if (login) {
     res.redirect("/mainpage");
@@ -49,7 +59,6 @@ app.get("/mainpage/create", (req, res) => {
 });
 
 app.use("/mainpage", taskRoutes);
-app.use(userRoutes);
 
 app.use((req, res) => {
   res.status(404).render("404", { title: "404", login: login });

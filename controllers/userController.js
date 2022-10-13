@@ -69,11 +69,11 @@ exports.login = (req, res, next) => {
           let token = jwt.sign({ username: user.name }, "verySecretValue", {
             expiresIn: "1h",
           });
-          res.redirect("/mainpage");
+          req.user = user;
+          res.redirect("/");
+          next();
         } else {
-          res.json({
-            message: "Password does not matched",
-          });
+          alert("Password does not matched");
         }
       });
     } else {
