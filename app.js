@@ -26,10 +26,15 @@ app.use(morgan("dev"));
 // routes
 app.use((req, res, next) => {
   const token = req.cookies.token;
-  if (typeof token != "undefined") {
-    const data = jwt.verify(token, "verySecretValue");
-    req.user = data;
+  try {
+    if (typeof token != "undefined") {
+      const data = jwt.verify(token, "verySecretValue");
+      req.user = data;
+    }
+  } catch {
+    (err) => console.log(err);
   }
+
   next();
 });
 app.use(userRoutes);

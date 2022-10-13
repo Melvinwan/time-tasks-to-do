@@ -25,7 +25,8 @@
           <% task.results.forEach(result =>{ %>
       <a style="text-decoration: none;" rel="Details click here" href="/mainpage/<%= result._id %> ">
         <div
-          class="container border <%= result.finished?"border-dark": result.priority==1?"border-danger":result.priority==2?"border-warning":"border-success"  %> rounded"
+
+        class="container my-3 border <%= result.finished?"border-dark": result.priority==1?"border-danger":result.priority==2?"border-warning":"border-success"  %> rounded"
         >
           <h4 class="title my-3"><%= result.task %></h4>
           <h4 class="priority my-3"></h4>
