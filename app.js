@@ -8,7 +8,6 @@ const User = require("./models/user");
 const { result } = require("lodash");
 const taskRoutes = require("./routes/taskRoutes");
 const userRoutes = require("./routes/userRoutes");
-const login = require("./login");
 const app = express();
 const taskController = require("./controllers/taskController");
 const dbURL = require("./dbURL");
@@ -38,7 +37,7 @@ app.get("/", (req, res) => {
   if (typeof req.user != "undefined") {
     res.redirect("/mainpage");
   } else {
-    res.render("index", { title: "Home", login: login, req: req });
+    res.render("index", { title: "Home", req: req });
   }
 });
 
@@ -46,17 +45,15 @@ app.get("/mainpage", isLoggedIn, taskController.task_mainpage);
 app.get("/create_account", (req, res) => {
   res.render("create_account", {
     title: "Log in",
-    login: login,
     req: req,
   });
 });
 app.get("/about", (req, res) => {
-  res.render("about", { title: "About", login: login, req: req });
+  res.render("about", { title: "About", req: req });
 });
 app.get("/mainpage/create", (req, res) => {
   res.render("create", {
     title: "Submit a new task",
-    login: login,
     req: req,
     task: {},
   });
@@ -65,7 +62,7 @@ app.get("/mainpage/create", (req, res) => {
 app.use("/mainpage", isLoggedIn, taskRoutes);
 
 app.use((req, res) => {
-  res.status(404).render("404", { title: "404", login: login });
+  res.status(404).render("404", { title: "404" });
 });
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on

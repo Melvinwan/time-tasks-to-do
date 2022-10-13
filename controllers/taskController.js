@@ -1,5 +1,4 @@
 const Task = require("../models/task");
-const login = require("../login");
 const taskController = require("../controllers/taskController");
 const task_mainpage = async (req, res) => {
   try {
@@ -19,35 +18,21 @@ const task_mainpage = async (req, res) => {
     ]);
     res.render("mainpage", {
       title: "Home",
-      login: login,
       req: req,
       tasks: docs,
     });
   } catch (err) {
     console.log(err);
   }
-  // Task.find()
-  //   .then((result) => {
-  //     res.render("mainpage", {
-  //       title: "Home",
-  //       login: login,
-  //       req: req,
-  //       tasks: result,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
 };
 
-const task_details = (req, res, login) => {
+const task_details = (req, res) => {
   const id = req.params.id;
   Task.findById(id)
     .then((result) => {
       res.render("details", {
         title: "Task Details",
         task: result,
-        login: login,
         req: req,
       });
     })

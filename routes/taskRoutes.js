@@ -1,6 +1,5 @@
 const express = require("express");
 const Task = require("../models/task");
-const login = require("../login");
 const taskController = require("../controllers/taskController");
 
 const router = express.Router();
@@ -22,7 +21,6 @@ router.get("/:id", (req, res) => {
       res.render("details", {
         title: "Task Details",
         task: result,
-        login: login,
         req: req,
         edit: true,
       });
@@ -38,7 +36,6 @@ router.get("/create/:id", (req, res) => {
       res.render("create", {
         title: "Edit",
         task: result,
-        login: login,
         req: req,
         edit: true,
       });

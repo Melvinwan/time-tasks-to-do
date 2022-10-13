@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const login = require("../login");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 exports.postCreateaccount = (req, res, next) => {
@@ -25,7 +24,6 @@ exports.postCreateaccount = (req, res, next) => {
       InputPassword,
       InputConfirmPassword,
       title: "Log in",
-      login: login,
     });
   } else {
     bcrypt.hash(InputPassword, 10, function (err, hashedPass) {
@@ -48,7 +46,6 @@ exports.postCreateaccount = (req, res, next) => {
             InputPassword,
             InputConfirmPassword,
             title: "Log in",
-            login: login,
           });
         });
     });
