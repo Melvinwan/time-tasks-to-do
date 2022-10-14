@@ -36,7 +36,9 @@
           <% if (result.note) { %>
             <p class="comments my-3"><%= result.note %></p></div>
 
-            <% } %></div><div class="col-sm my-3 d-flex align-items-center justify-content-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="width: 10vmin; height: 10vmin"></div></div>
+            <% } %></div><div class="col-sm my-3 d-flex align-items-center justify-content-center">
+              <form id="form2" action="/mainpage/update/<%= result._id %>" method="post"><input onchange="this.form.submit()" class="form-check-input" type="checkbox" value="<%= !result.finished%>" id="<%= !result._id%>" name="finished"style="width: 8vmin; height: 8vmin" <%=  result.finished?"checked":""%> ></form>
+              </div></div>
           </div> </a
       ><% })}) %> <% } else { %>
 

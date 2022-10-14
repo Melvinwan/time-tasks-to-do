@@ -14,6 +14,22 @@ router.post("/create/:id", async (req, res, next) => {
     })
     .catch((err) => console.log(err));
 });
+router.post("/update/:id", async (req, res, next) => {
+  const id = req.params.id;
+  const update = req.body;
+  const options = { new: true };
+  Task.findByIdAndUpdate(id, update, options)
+    .then((result) => {
+      res.redirect("/mainpage");
+    })
+    .catch((err) => console.log(err));
+  // const options = { new: true };
+  // Task.findByIdAndUpdate(id, update, options)
+  //   .then((result) => {
+  //     res.redirect("/mainpage");
+  //   })
+  //   .catch((err) => console.log(err));
+});
 router.get("/:id", (req, res) => {
   const id = req.params.id;
   Task.findById(id)
