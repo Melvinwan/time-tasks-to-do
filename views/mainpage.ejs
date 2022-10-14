@@ -31,12 +31,13 @@
 
         class="container my-3 border <%= result.finished?"border-dark": result.priority==1?"border-danger":result.priority==2?"border-warning":"border-success"  %> rounded"
         >
-          <h4 class="title my-3"><%= result.task %></h4>
+        <div class="row d-flex justify-content-around"><div class="col-sm"><h4 class="title my-3"><%= result.task %></h4>
           <h4 class="priority my-3"></h4>
           <% if (result.note) { %>
             <p class="comments my-3"><%= result.note %></p></div>
 
-            <% } %></div> </a
+            <% } %></div><div class="col-sm my-3 d-flex align-items-center justify-content-center"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="width: 10vmin; height: 10vmin"></div></div>
+          </div> </a
       ><% })}) %> <% } else { %>
 
       <h2>Add your first task...</h2>
