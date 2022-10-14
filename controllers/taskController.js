@@ -1,9 +1,18 @@
 const Task = require("../models/task");
 const taskController = require("../controllers/taskController");
 const task_mainpage = async (req, res) => {
+  if (typeof req.query.finished != "undefined") {
+    if (req.query.finished == "true") {
+      finished_req = true;
+    } else {
+      finished_req = false;
+    }
+  } else {
+    finished_req = false;
+  }
   try {
     const docs = await Task.aggregate([
-      { $match: { finished: false } },
+      { $match: { finished: finished_req } },
       {
         $group: {
           // Each `_id` must be unique, so if there are multiple
@@ -15,11 +24,12 @@ const task_mainpage = async (req, res) => {
           },
         },
       },
-    ]);
+    ]).sort({ _id: 1, "results.priority": 1 });
     res.render("mainpage", {
       title: "Home",
       req: req,
       tasks: docs,
+      finished: finished_req,
     });
   } catch (err) {
     console.log(err);

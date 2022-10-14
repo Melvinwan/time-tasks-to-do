@@ -32,7 +32,7 @@ app.use((req, res, next) => {
       req.user = data;
     }
   } catch {
-    (err) => console.log(err);
+    (err) => res.clearCookie("token").then(res.redirect("/"));
   }
 
   next();

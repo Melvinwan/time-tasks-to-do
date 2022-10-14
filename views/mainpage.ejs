@@ -14,16 +14,19 @@
 		}
   </style>
   <%- include('./partials/head.ejs') %>
-
   <body>
     <%- include('./partials/nav.ejs') %>
-    <div class="container d-flex align-items-center justify-content-center"
-    style="min-height: 70vh"><div class="col">
+    <div class="container"
+    style="min-height: 70vh"><form
+  action="/mainpage" method="get"
+><button class="btn btn-primary my-2" name="finished" value="<%= !finished?"true":"false"%>">
+  <%= !finished?"Finished":"Unfinished"%>
+</button></form><div class="col">
       <% if (typeof tasks != "undefined") { %> <% tasks.forEach(task =>{ %>
         <div>
-          <h3 class="date_deadline my-3"><%= task._id %></h3>
+          <h3 class="date_deadline my-3" style="width: 70vw;"><%= task._id %></h3>
           <% task.results.forEach(result =>{ %>
-      <a style="text-decoration: none;" rel="Details click here" href="/mainpage/<%= result._id %> ">
+      <a style="text-decoration: none;width: 70vw;" rel="Details click here" href="/mainpage/<%= result._id %> ">
         <div
 
         class="container my-3 border <%= result.finished?"border-dark": result.priority==1?"border-danger":result.priority==2?"border-warning":"border-success"  %> rounded"
