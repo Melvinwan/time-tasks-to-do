@@ -24,6 +24,7 @@ exports.postCreateaccount = (req, res, next) => {
       InputPassword,
       InputConfirmPassword,
       title: "Log in",
+      req: req,
     });
   } else {
     bcrypt.hash(InputPassword, 10, function (err, hashedPass) {
@@ -46,6 +47,7 @@ exports.postCreateaccount = (req, res, next) => {
             InputPassword,
             InputConfirmPassword,
             title: "Log in",
+            req: req,
           });
         });
     });
