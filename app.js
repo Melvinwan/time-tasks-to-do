@@ -1,90 +1,81 @@
 const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const Task = require("./models/task");
+const User = require("./models/user");
 const { result } = require("lodash");
-
+const taskRoutes = require("./routes/taskRoutes");
+const userRoutes = require("./routes/userRoutes");
 const app = express();
-
-const dbURI =
-  "mongodb+srv://melvinwan:Zim12345!@time-task-to-do.axails6.mongodb.net/?retryWrites=true&w=majority";
+const taskController = require("./controllers/taskController");
+const dbURL = require("./dbURL");
+const dotenv = require("dotenv");
+dotenv.config();
 mongoose
-  .connect(dbURI)
+  .connect(process.env.DATABASE)
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
-
 // register view engine
 app.set("view engine", "ejs");
-
-// check login
-const login = false;
-const page = function (login) {
-  if (login) {
-    return "mainpage";
-  } else {
-    return "index";
-  }
-};
+app.use(cookieParser());
 
 // middleware & static files
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-// mongiise and mongo sandbox routes
-app.get("/add-task", (req, res) => {
-  const task = new Task({
-    date_deadline: 05102022,
-    task: "study",
-    priority: 2,
-    finished: false,
-  });
-
-  task
-    .save()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => console.log(err));
-});
-app.get("/all-blogs", (req, res) => {
-  Task.find()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-app.get("/single-blog", (req, res) => {
-  Task.findById("633d93f7b347f29b227a0c56")
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 // routes
+app.use((req, res, next) => {
+  const token = req.cookies.token;
+  try {
+    if (typeof token != "undefined") {
+      const data = jwt.verify(token, "verySecretValue");
+      delete data.tasks;
+      req.user = data;
+    }
+  } catch {
+    (err) => res.clearCookie("token").then(res.redirect("/"));
+  }
+
+  next();
+});
+app.use(userRoutes);
 app.get("/", (req, res) => {
-  res.render(page(login), { title: "Home", login: login });
+  if (typeof req.user != "undefined") {
+    res.redirect("/mainpage");
+  } else {
+    res.render("index", { title: "Home", req: req });
+  }
 });
-app.get("/mainpage", (req, res) => {
-  Task.find()
-    .then((result) => {
-      res.render("mainpage", { title: "Home", tasks: result });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+
+app.get("/mainpage", isLoggedIn, taskController.task_mainpage);
 app.get("/create_account", (req, res) => {
-  res.render("create_account", { title: "Log in", login: login });
+  res.render("create_account", {
+    title: "Log in",
+    req: req,
+  });
 });
 app.get("/about", (req, res) => {
-  res.render("about", { title: "About", login: login });
+  res.render("about", { title: "About", req: req });
 });
 app.get("/mainpage/create", (req, res) => {
-  res.redirect("create", { title: "Submit a new task", login: login });
+  res.render("create", {
+    title: "Submit a new task",
+    req: req,
+    task: [],
+  });
 });
+
+app.use("/mainpage", isLoggedIn, taskRoutes);
+
 app.use((req, res) => {
-  res.status(404).render("404", { title: "404", login: login });
+  res.status(404).render("404", { title: "404" });
 });
+function isLoggedIn(req, res, next) {
+  // if user is authenticated in the session, carry on
+  if (typeof req.user != "undefined") return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect("/");
+}

@@ -1,6 +1,7 @@
+const { result } = require("lodash");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+const Task = require("./task");
 const taskSchema = new Schema({
   date_deadline: {
     type: String,
@@ -24,6 +25,10 @@ const taskSchema = new Schema({
     required: false,
   },
 });
+const userSchema = new Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  tasks: [taskSchema],
+});
 
-const Task = mongoose.model("Task", taskSchema);
-module.exports = Task;
+module.exports = mongoose.model("User", userSchema);

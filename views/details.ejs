@@ -1,0 +1,43 @@
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+<style>.delete{
+    color: red;
+  }
+  .delete:hover{
+    cursor: pointer;
+    box-shadow: 1px 2px 3px rgba(0,0,0,0.2);
+  }</style>
+  <body>
+    <%- include("./partials/nav.ejs") %>
+    <div class="container d-flex align-items-center justify-content-center"
+    style="min-height: 70vh"><div
+          class="container border <%= task[0].tasks[0].finished?"border-dark": task[0].tasks[0].priority==1?"border-danger":task[0].tasks[0].priority==2?"border-warning":"border-light"  %> rounded"
+        ><h3 class="date_deadline my-3"><%= task[0].tasks[0].date_deadline %> <%= task[0].tasks[0].time_deadline&& ("("+task[0].tasks[0].time_deadline+")") %></h3>
+          <h4 class="title my-3"><%= task[0].tasks[0].task %></h4>
+          <h4 class="priority my-3"></h4>
+          <% if (task.note) { %>
+            <p class="note my-3"><%= task[0].tasks[0].note %></p>
+            <% } %>
+            <a class="delete" data-doc="<%=task[0].tasks[0]._id %>">delete</a>
+            <a href="/mainpage">back</a>
+            <a style="color:black" class="edit" href="/mainpage/create/<%= task[0].tasks[0]._id %>">edit</a>
+        </div>
+</div>
+
+    <!-- <%- include("./partials/footer.ejs") %> -->
+
+    <script>
+      const trashcan = document.querySelector("a.delete");
+      trashcan.addEventListener("click", (e) => {
+        const endpoint = `/mainpage/${trashcan.dataset.doc}`;
+        console.log(endpoint)
+        fetch(endpoint, {
+          method: "DELETE",
+        })
+          .then((response) => response.json()).then((data) => (window.location.href = data.redirect)).catch((err) => console.log(err));
+
+
+      });
+    </script>
+  </body>
+</html>

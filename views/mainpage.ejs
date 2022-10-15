@@ -4,12 +4,53 @@
       white-space: nowrap;
       text-align: center;
     }
+    .btn-circle.btn-xl {
+			width: 100px;
+			height: 100px;
+			padding: 13px 18px;
+			border-radius: 60px;
+			font-size: 15px;
+			text-align: center;
+		}
   </style>
   <%- include('./partials/head.ejs') %>
-
   <body>
     <%- include('./partials/nav.ejs') %>
-    <div class="container"></div>
+    <div class="container"
+    style="min-height: 70vh"><form
+  action="/mainpage" method="get"
+><button class="btn btn-primary my-2" name="finished" value="<%= !finished?"true":"false"%>">
+  <%= !finished?"Finished":"Unfinished"%>
+</button></form><div class="col">
+      <% if (typeof tasks != "undefined") { %> <% for (const [key, value] of Object.entries(tasks)) { %>
+        <div>
+          <h3 class="date_deadline my-3" style="width: 70vw;"><%= key %></h3>
+          <% value.forEach(result =>{ %>
+      <a style="text-decoration: none;width: 70vw;" rel="Details click here" href="/mainpage/<%= result._id %> ">
+        <div
+
+        class="container my-3 border <%= result.finished?"border-dark": result.priority==1?"border-danger":result.priority==2?"border-warning":"border-success"  %> rounded"
+        >
+        <div class="row d-flex justify-content-around"><div class="col-sm"><h4 class="title my-3"><%= result.task %>&nbsp<%= result.time_deadline&& ("("+result.time_deadline+")") %></h4>
+          <h4 class="priority my-3"></h4>
+          <% if (result.note) { %>
+            <p class="comments my-3"><%= result.note %></p></div>
+
+            <% } %></div><div class="col-sm my-3 d-flex align-items-center justify-content-center">
+              <form id="form2" action="/mainpage/update/<%= result._id %>" method="post">
+                <% if(result.finished){ %><input onchange="this.form.submit()" type="hidden" value="<%= !result.finished%>" id="<%= !result._id%>" name="finished"><% } %>
+
+                <input onchange="this.form.submit()" class="form-check-input" type="checkbox" value="<%= !result.finished%>" id="<%= !result._id%>" name="finished"style="width: 8vmin; height: 8vmin" <%=  result.finished?"checked":""%> ></form>
+              </div></div>
+          </div> </a
+      ><% })} %> <% } else { %>
+
+      <h2>Add your first task...</h2>
+      <% } %>
+
+</div><a href="/mainpage/create"style="position: fixed; bottom: 20px;left: 50%;margin-left: -50px;width:100vw"><button type="button" class="btn btn-primary btn-circle btn-xl"
+      >Add<br />Task</button></a>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

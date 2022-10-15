@@ -7,48 +7,122 @@
   </style>
   <%- include('./partials/head.ejs') %>
   <body>
-    <nav class="navbar bg-light">
-      <div class="container-fluid d-flex justify-content-between">
-        <a class="navbar-brand" style="font-size: 7vmin" href="/"
-          >Time Tasks To Do</a
-        >
-        <form class="d-flex mx-5 w-25" role="login">
-          <div class="row mx-1">
-            <label for="Username" class="form-label" style="margin-left: 8px"
-              >Username</label
-            >
+    <%- include('./partials/nav.ejs') %>
+    <div
+      class="container d-flex align-items-center justify-content-center"
+      style="height: 70vh"
+    >
+      <form
+        action="/mainpage/<%= typeof edit!='undefined'?("create/"+task[0].tasks[0]._id):""%>"
+        method="POST"
+      >
+        <div class="my-2">
+          <label for="date_deadline">Deadline Date</label>
+          <input
+            id="date_deadline"
+            name="date_deadline"
+            class="form-control"
+            type="date"
+            required
+          />
+        </div>
+        <div class="my-2">
+          <label for="time_deadline">Select a specific time:</label>
+          <input
+            class="form-control"
+            name="time_deadline"
+            type="time"
+            id="time_deadline"
+          />
+        </div>
+        <div class="form-group">
+          <label for="task">Task</label>
+          <input
+            type="Task"
+            class="form-control"
+            id="InputTask"
+            placeholder="Task"
+            name="task"
+            required
+          />
+        </div>
+        <label for="InputPriority">Priority</label>
+        <div class="my-2">
+          <div class="form-check form-check-inline">
             <input
-              class="form-control form-control-sm"
-              placeholder="Username"
-              aria-label="Username"
+              class="form-check-input"
+              type="radio"
+              name="priority"
+              id="priority1"
+              value="1"
+              required
             />
+            <label class="form-check-label" for="inlineRadio1">1</label>
           </div>
-          <div class="row mx-1">
-            <label for="Username" class="form-label" style="margin-left: 8px"
-              >Password</label
-            >
+          <div class="form-check form-check-inline">
             <input
-              class="form-control form-control-sm"
-              placeholder="Password"
-              aria-label="Password"
+              class="form-check-input"
+              type="radio"
+              name="priority"
+              id="priority2"
+              value="2"
+              required
             />
+            <label class="form-check-label" for="inlineRadio2">2</label>
           </div>
-          <div style="position: relative">
-            <button
-              class="btn btn-sm btn-outline-success"
-              type="submit"
-              style="position: absolute; bottom: 0px"
-            >
-              Log In
-            </button>
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="priority"
+              id="priority3"
+              value="3"
+              required
+            />
+            <label class="form-check-label" for="inlineRadio3">3</label>
           </div>
-        </form>
-      </div>
-    </nav>
-    <div class="container"></div>
+        </div>
+
+        <div class="form-group my-2">
+          <label for="InputNote">Note</label>
+          <input
+            type="Note"
+            class="form-control"
+            id="InputNote"
+            placeholder="Note"
+            name="note"
+          />
+        </div>
+        <button type="addtask" class="btn btn-primary my-2">
+          <%= typeof edit!='undefined'?"Edit":"Add task" %>
+        </button>
+      </form>
+    </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript">
+      if("<%= JSON.stringify(typeof edit!='undefined'?edit:false) %>"){
+        const date_deadline = "<%= JSON.stringify(task[0]&&task[0].tasks[0].date_deadline) %>".slice(
+          5,
+          -5
+        );
+        const time_deadline = "<%= JSON.stringify(task[0]&&task[0].tasks[0].time_deadline) %>".slice(
+          5,
+          -5
+        );
+        const task = "<%= JSON.stringify(task[0]&&task[0].tasks[0].task) %>".slice(5, -5);
+        const note = "<%= JSON.stringify(task[0]&&task[0].tasks[0].note) %>".slice(5, -5);
+        const priority = "<%= JSON.stringify(task[0]&&task[0].tasks[0].priority) %>";
+
+        if ("<%= JSON.stringify(typeof edit!='undefined'?edit:false) %>") {
+          document.getElementById("date_deadline").value = date_deadline;
+          document.getElementById("time_deadline").value = time_deadline;
+          document.getElementById("InputTask").value = task;
+          document.getElementById("InputNote").value = note;
+          document.getElementById("priority" + priority).checked = true;
+      }}
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

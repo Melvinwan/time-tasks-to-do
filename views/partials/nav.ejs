@@ -3,38 +3,65 @@
     <a class="navbar-brand" style="font-size: 7vmin" href="/"
       >Time Tasks To Do</a
     >
-    <% if (!login) { %>
-    <form class="d-flex mx-5 w-25" role="login">
-      <div class="row mx-1">
-        <label for="Username" class="form-label" style="margin-left: 8px"
-          >Username</label
-        >
-        <input
-          class="form-control form-control-sm"
-          placeholder="Username"
-          aria-label="Username"
-        />
+    <% if (!req.user) { %>
+    <div>
+      <div class="col">
+        <div>
+          <form class="d-flex mx-5 w-25" role="login" action="/" method="POST">
+            <div class="row mx-1">
+              <label for="Username" class="form-label">Username</label>
+              <input
+                class="form-control form-control-sm"
+                placeholder="Username"
+                aria-label="Username"
+                id="Username"
+                name="Username"
+              />
+            </div>
+            <div class="row mx-1">
+              <label for="Username" class="form-label">Password</label>
+              <input
+                class="form-control form-control-sm"
+                placeholder="Password"
+                aria-label="Password"
+                id="Password"
+                type="password"
+                name="Password"
+              />
+            </div>
+            <div style="position: relative">
+              <button
+                class="btn btn-sm btn-outline-success"
+                type="submit"
+                style="position: absolute; bottom: 0px"
+              >
+                Log In
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <% if(typeof error != 'undefined'){ %>
+        <p class="text-danger h6 mx-5">*<%= error %></p>
+        <% } %>
       </div>
-      <div class="row mx-1">
-        <label for="Username" class="form-label" style="margin-left: 8px"
-          >Password</label
-        >
-        <input
-          class="form-control form-control-sm"
-          placeholder="Password"
-          aria-label="Password"
-        />
+    </div>
+
+    <% } else{%>
+    <div class="d-flex mx-5 w-25">
+      <div class="mx-3">
+        <p style="font-size: 2vw; text-transform: uppercase">
+          Hi 👋&nbsp;<%= req.user.username %>
+        </p>
       </div>
-      <div style="position: relative">
-        <button
-          class="btn btn-sm btn-outline-success"
-          type="submit"
-          style="position: absolute; bottom: 0px"
-        >
-          Log In
+
+      <form action="/logout" method="POST">
+        <button class="btn btn-sm btn-outline-success" type="submit">
+          Log out
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
+
     <% } %>
   </div>
 </nav>
