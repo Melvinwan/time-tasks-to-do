@@ -11,8 +11,10 @@ const userRoutes = require("./routes/userRoutes");
 const app = express();
 const taskController = require("./controllers/taskController");
 const dbURL = require("./dbURL");
+const dotenv = require("dotenv");
+dotenv.config();
 mongoose
-  .connect(dbURL)
+  .connect(process.env.DATABASE)
   .then((result) => app.listen(3000))
   .catch((err) => console.log(err));
 // register view engine
