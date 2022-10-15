@@ -15,7 +15,7 @@ dotenv.config();
 mongoose
   .connect(process.env.DATABASE)
   .then(() => {
-    console.log("DB CONNECTED");
+    app.listen(process.env.PORT);
   })
   .catch((err) => console.log(err));
 // mongoose
