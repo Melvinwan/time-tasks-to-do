@@ -10,7 +10,6 @@ const taskRoutes = require("./routes/taskRoutes");
 const userRoutes = require("./routes/userRoutes");
 const app = express();
 const taskController = require("./controllers/taskController");
-const dbURL = require("./dbURL");
 const dotenv = require("dotenv");
 dotenv.config();
 mongoose
