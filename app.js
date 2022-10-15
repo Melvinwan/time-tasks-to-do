@@ -14,8 +14,14 @@ const dotenv = require("dotenv");
 dotenv.config();
 mongoose
   .connect(process.env.DATABASE)
-  .then((result) => app.listen(3000))
+  .then(() => {
+    console.log("DB CONNECTED");
+  })
   .catch((err) => console.log(err));
+// mongoose
+//   .connect(process.env.DATABASE)
+//   .then((result) => app.listen(3000))
+//   .catch((err) => console.log(err));
 // register view engine
 app.set("view engine", "ejs");
 app.use(cookieParser());
