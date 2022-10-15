@@ -51,12 +51,25 @@ const task_mainpage = async (req, res) => {
 
 const task_details = (req, res) => {
   const id = req.params.id;
-  Task.findById(id)
+  // Task.findById(id)
+  // .then((result) => {
+  //   res.render("details", {
+  //     title: "Task Details",
+  //     task: result,
+  //     req: req,
+  //     edit: true,
+  //   });
+  // })
+  // .catch((err) => {
+  //   console.log(err);
+  // });
+  User.find({ _id: req.user.id }, { tasks: { $elemMatch: { _id: id } } })
     .then((result) => {
       res.render("details", {
         title: "Task Details",
         task: result,
         req: req,
+        edit: true,
       });
     })
     .catch((err) => {
@@ -64,28 +77,134 @@ const task_details = (req, res) => {
     });
 };
 
-task_create_post = (req, res) => {
-  req.body.finished = false;
-  const task = new Task(req.body);
+const task_update = async (req, res, next) => {
+  const id = req.params.id;
+  const update = req.body;
+  const USER_ID = req.user.id;
+  const options = { new: true };
+  User.findByIdAndUpdate(
+    { _id: USER_ID },
+    { $set: { "tasks.$[e1].finished": update.finished } },
+    {
+      arrayFilters: [{ "e1._id": id }],
+    }
+  )
+    .then((result) => {
+      res.redirect("/mainpage");
+    })
+    .catch((err) => console.log(err));
+  // const id = req.params.id;
+  // const update = req.body;
+  // const options = { new: true };
+  // Task.findByIdAndUpdate(id, update, options)
+  //   .then((result) => {
+  //     res.redirect("/mainpage");
+  //   })
+  //   .catch((err) => console.log(err));
+};
 
-  task
-    .save()
+const task_create_post = (req, res) => {
+  USER_ID = req.user.id;
+  req.body.finished = false;
+
+  User.findOneAndUpdate({ _id: USER_ID }, { $push: { tasks: req.body } }).then(
+    (result) => {
+      res.redirect("/mainpage");
+    }
+  );
+  // const task = new Task(req.body);
+  // console.log(req.body);
+  //
+  //
+  // task
+  //   .save()
+  //   .then((result) => {
+  //     res.redirect("/mainpage");
+  //   })
+  //   .catch((err) => console.log(err));
+};
+const task_edit = async (req, res, next) => {
+  const id = req.params.id;
+  const USER_ID = req.user.id;
+  const options = { new: true };
+  const checked = await User.find(
+    { _id: req.user.id },
+    { tasks: { $elemMatch: { _id: id } } }
+  ).then((result) => {
+    return result[0].tasks[0].finished;
+  });
+  req.body.finished = checked;
+  const update = req.body;
+  User.findByIdAndUpdate(
+    { _id: USER_ID },
+    { $set: { "tasks.$[e1]": update } },
+    {
+      arrayFilters: [{ "e1._id": id }],
+    }
+  )
     .then((result) => {
       res.redirect("/mainpage");
     })
     .catch((err) => console.log(err));
 };
-
-const task_delete = (req, res) => {
+const task_to_edit = (req, res) => {
   const id = req.params.id;
-
-  Task.findByIdAndDelete(id)
+  User.find({ _id: req.user.id }, { tasks: { $elemMatch: { _id: id } } })
     .then((result) => {
-      res.json({ redirect: "/mainpage" });
+      res.render("create", {
+        title: "Edit",
+        task: result,
+        req: req,
+        edit: true,
+      });
     })
     .catch((err) => {
       console.log(err);
     });
+  // Task.findById(id)
+  //   .then((result) => {
+  //     res.render("create", {
+  //       title: "Edit",
+  //       task: result,
+  //       req: req,
+  //       edit: true,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+};
+const task_delete = (req, res) => {
+  const id = req.params.id;
+  const USER_ID = req.user.id;
+  User.findByIdAndUpdate(
+    { _id: USER_ID },
+    {
+      $pull: {
+        tasks: {
+          _id: id,
+        },
+      },
+    }
+  ).then((result) => {
+    res.json({ redirect: "/mainpage" });
+  });
+
+  // Task.findByIdAndDelete(id)
+  // .then((result) => {
+  //   res.json({ redirect: "/mainpage" });
+  // })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
-module.exports = { task_mainpage, task_delete, task_details, task_create_post };
+module.exports = {
+  task_mainpage,
+  task_delete,
+  task_details,
+  task_create_post,
+  task_edit,
+  task_update,
+  task_to_edit,
+};

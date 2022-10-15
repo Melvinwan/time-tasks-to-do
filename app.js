@@ -29,6 +29,7 @@ app.use((req, res, next) => {
   try {
     if (typeof token != "undefined") {
       const data = jwt.verify(token, "verySecretValue");
+      delete data.tasks;
       req.user = data;
     }
   } catch {
