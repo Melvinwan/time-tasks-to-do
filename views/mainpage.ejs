@@ -22,10 +22,10 @@
 ><button class="btn btn-primary my-2" name="finished" value="<%= !finished?"true":"false"%>">
   <%= !finished?"Finished":"Unfinished"%>
 </button></form><div class="col">
-      <% if (typeof tasks != "undefined") { %> <% tasks.forEach(task =>{ %>
+      <% if (typeof tasks != "undefined") { %> <% for (const [key, value] of Object.entries(tasks)) { %>
         <div>
-          <h3 class="date_deadline my-3" style="width: 70vw;"><%= task._id %></h3>
-          <% task.results.forEach(result =>{ %>
+          <h3 class="date_deadline my-3" style="width: 70vw;"><%= key %></h3>
+          <% value.forEach(result =>{ %>
       <a style="text-decoration: none;width: 70vw;" rel="Details click here" href="/mainpage/<%= result._id %> ">
         <div
 
@@ -43,7 +43,7 @@
                 <input onchange="this.form.submit()" class="form-check-input" type="checkbox" value="<%= !result.finished%>" id="<%= !result._id%>" name="finished"style="width: 8vmin; height: 8vmin" <%=  result.finished?"checked":""%> ></form>
               </div></div>
           </div> </a
-      ><% })}) %> <% } else { %>
+      ><% })} %> <% } else { %>
 
       <h2>Add your first task...</h2>
       <% } %>

@@ -60,7 +60,7 @@ app.get("/mainpage/create", (req, res) => {
   res.render("create", {
     title: "Submit a new task",
     req: req,
-    task: {},
+    task: [],
   });
 });
 

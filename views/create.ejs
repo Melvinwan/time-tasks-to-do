@@ -13,7 +13,7 @@
       style="height: 70vh"
     >
       <form
-        action="/mainpage/<%= typeof edit!='undefined'?("create/"+task._id):""%>"
+        action="/mainpage/<%= typeof edit!='undefined'?("create/"+task[0].tasks[0]._id):""%>"
         method="POST"
       >
         <div class="my-2">
@@ -103,17 +103,17 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script type="text/javascript">
       if("<%= JSON.stringify(typeof edit!='undefined'?edit:false) %>"){
-        const date_deadline = "<%= JSON.stringify(task.date_deadline) %>".slice(
+        const date_deadline = "<%= JSON.stringify(task[0]&&task[0].tasks[0].date_deadline) %>".slice(
           5,
           -5
         );
-        const time_deadline = "<%= JSON.stringify(task.time_deadline) %>".slice(
+        const time_deadline = "<%= JSON.stringify(task[0]&&task[0].tasks[0].time_deadline) %>".slice(
           5,
           -5
         );
-        const task = "<%= JSON.stringify(task.task) %>".slice(5, -5);
-        const note = "<%= JSON.stringify(task.note) %>".slice(5, -5);
-        const priority = "<%= JSON.stringify(task.priority) %>";
+        const task = "<%= JSON.stringify(task[0]&&task[0].tasks[0].task) %>".slice(5, -5);
+        const note = "<%= JSON.stringify(task[0]&&task[0].tasks[0].note) %>".slice(5, -5);
+        const priority = "<%= JSON.stringify(task[0]&&task[0].tasks[0].priority) %>";
 
         if ("<%= JSON.stringify(typeof edit!='undefined'?edit:false) %>") {
           document.getElementById("date_deadline").value = date_deadline;

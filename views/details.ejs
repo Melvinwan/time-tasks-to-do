@@ -11,16 +11,16 @@
     <%- include("./partials/nav.ejs") %>
     <div class="container d-flex align-items-center justify-content-center"
     style="min-height: 70vh"><div
-          class="container border <%= task.finished?"border-dark": task.priority==1?"border-danger":task.priority==2?"border-warning":"border-light"  %> rounded"
-        ><h3 class="date_deadline my-3"><%= task.date_deadline %> <%= task.time_deadline&& ("("+task.time_deadline+")") %></h3>
-          <h4 class="title my-3"><%= task.task %></h4>
+          class="container border <%= task[0].tasks[0].finished?"border-dark": task[0].tasks[0].priority==1?"border-danger":task[0].tasks[0].priority==2?"border-warning":"border-light"  %> rounded"
+        ><h3 class="date_deadline my-3"><%= task.date_deadline %> <%= task[0].tasks[0].time_deadline&& ("("+task[0].tasks[0].time_deadline+")") %></h3>
+          <h4 class="title my-3"><%= task[0].tasks[0].task %></h4>
           <h4 class="priority my-3"></h4>
           <% if (task.note) { %>
-            <p class="note my-3"><%= task.note %></p>
+            <p class="note my-3"><%= task[0].tasks[0].note %></p>
             <% } %>
-            <a class="delete" data-doc="<%=task._id %>">delete</a>
+            <a class="delete" data-doc="<%=task[0].tasks[0]._id %>">delete</a>
             <a href="/mainpage">back</a>
-            <a style="color:black" class="edit" href="/mainpage/create/<%= task._id %>">edit</a>
+            <a style="color:black" class="edit" href="/mainpage/create/<%= task[0].tasks[0]._id %>">edit</a>
         </div>
 </div>
 

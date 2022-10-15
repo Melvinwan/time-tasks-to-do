@@ -60,6 +60,11 @@ exports.login = (req, res, next) => {
     if (user) {
       bcrypt.compare(Password, user.password, function (err, result) {
         if (err) {
+          res.render("index", {
+            error: err,
+            title: "Home",
+            req: req,
+          });
           console.log(err);
         }
         if (result) {
@@ -75,10 +80,20 @@ exports.login = (req, res, next) => {
           });
           res.redirect("/");
         } else {
+          res.render("index", {
+            error: "Password does not matched",
+            title: "Home",
+            req: req,
+          });
           console.log("Password does not matched");
         }
       });
     } else {
+      res.render("index", {
+        error: "User not found",
+        title: "Home",
+        req: req,
+      });
       console.log("User not found");
     }
   });

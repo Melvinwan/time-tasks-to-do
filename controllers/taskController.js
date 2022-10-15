@@ -1,6 +1,8 @@
 const Task = require("../models/task");
-const taskController = require("../controllers/taskController");
+const User = require("../models/user");
+const mongoose = require("mongoose");
 const task_mainpage = async (req, res) => {
+  const USER_ID = req.user.id;
   if (typeof req.query.finished != "undefined") {
     if (req.query.finished == "true") {
       finished_req = true;
@@ -11,24 +13,35 @@ const task_mainpage = async (req, res) => {
     finished_req = false;
   }
   try {
-    const docs = await Task.aggregate([
-      { $match: { finished: finished_req } },
-      {
-        $group: {
-          // Each `_id` must be unique, so if there are multiple
-          // documents with the same age, MongoDB will increment `count`.
-          _id: "$date_deadline",
-          count: { $sum: 1 },
-          results: {
-            $push: "$$ROOT",
-          },
-        },
-      },
-    ]).sort({ _id: 1, "results.priority": 1 });
+    const user_data = await User.findById(USER_ID);
+    const tasks = user_data.tasks.filter(function (obj) {
+      return obj.finished == finished_req;
+    });
+    const groups = tasks.reduce((groups, item) => {
+      const group = groups[item.date_deadline] || [];
+      group.push(item);
+      groups[item.date_deadline] = group;
+      return groups;
+    }, {});
+    // const docs = await Task.aggregate([
+    //   { $match: { finished: finished_req } },
+    //   {
+    //     $group: {
+    //       // Each `_id` must be unique, so if there are multiple
+    //       // documents with the same age, MongoDB will increment `count`.
+    //       _id: "$date_deadline",
+    //       count: { $sum: 1 },
+    //       results: {
+    //         $push: "$$ROOT",
+    //       },
+    //     },
+    //   },
+    // ]).sort({ _id: 1, "results.priority": 1 });
+    // docs.forEach((res) => console.log(res));
     res.render("mainpage", {
       title: "Home",
       req: req,
-      tasks: docs,
+      tasks: groups,
       finished: finished_req,
     });
   } catch (err) {
