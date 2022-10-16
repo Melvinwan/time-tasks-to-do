@@ -1,6 +1,8 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 exports.postCreateaccount = (req, res, next) => {
   const { InputUsername, InputPassword, InputConfirmPassword } = req.body;
   let errors = [];
@@ -27,37 +29,41 @@ exports.postCreateaccount = (req, res, next) => {
       req: req,
     });
   } else {
-    bcrypt.hash(InputPassword, 10, function (err, hashedPass) {
-      if (err) {
-        console.log(err);
-      }
-      new User({
-        username: InputUsername,
-        password: hashedPass,
-      })
-        .save()
-        .then((result) => {
-          res.redirect("/mainpage");
+    bcrypt.hash(
+      InputPassword,
+      Number(process.env.SALTED_HASH),
+      function (err, hashedPass) {
+        if (err) {
+          console.log(err);
+        }
+        new User({
+          username: InputUsername,
+          password: hashedPass,
         })
-        .catch((err) => {
-          errors.push({ msg: "Username already exist" });
-          res.render("create_account", {
-            errors,
-            InputUsername,
-            InputPassword,
-            InputConfirmPassword,
-            title: "Log in",
-            req: req,
+          .save()
+          .then((result) => {
+            res.redirect("/mainpage");
+          })
+          .catch((err) => {
+            errors.push({ msg: "Username already exist" });
+            res.render("create_account", {
+              errors,
+              InputUsername,
+              InputPassword,
+              InputConfirmPassword,
+              title: "Log in",
+              req: req,
+            });
           });
-        });
-    });
+      }
+    );
   }
 };
 
 exports.login = (req, res, next) => {
   const Username = req.body.Username;
   const Password = req.body.Password;
-
+  const secret = process.env.JWT_SECRET;
   User.findOne({ $or: [{ username: Username }] }).then((user) => {
     if (user) {
       bcrypt.compare(Password, user.password, function (err, result) {
@@ -72,7 +78,7 @@ exports.login = (req, res, next) => {
         if (result) {
           const token = jwt.sign(
             { id: user._id, username: user.username, tasks: user.tasks },
-            "verySecretValue",
+            secret,
             {
               expiresIn: "1h",
             }
