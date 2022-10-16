@@ -61,6 +61,12 @@ app.get("/create_account", (req, res) => {
     req: req,
   });
 });
+app.get("/change_password", (req, res) => {
+  res.render("change_password", {
+    title: "Change Password",
+    req: req,
+  });
+});
 app.get("/about", (req, res) => {
   res.render("about", { title: "About", req: req });
 });

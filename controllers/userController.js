@@ -106,6 +106,98 @@ exports.login = (req, res, next) => {
     }
   });
 };
+exports.change_password = (req, res, next) => {
+  const {
+    InputUsername,
+    InputCurrentPassword,
+    InputNewPassword,
+    InputNewConfirmPassword,
+  } = req.body;
+  let errors = [];
+  // Check required fields
+  if (
+    !InputUsername ||
+    !InputCurrentPassword ||
+    !InputNewPassword ||
+    !InputNewConfirmPassword
+  ) {
+    errors.push({ msg: "Please fill in all fields" });
+  }
+  // Check new password
+  if (InputNewPassword !== InputNewConfirmPassword) {
+    errors.push({ msg: "Passwords do not match" });
+  }
+
+  // Check new password length
+  if (InputNewPassword.length < 6) {
+    errors.push({ msg: "Password should be at least 6 characters" });
+  }
+  // Check current and new password
+  if (InputNewPassword == InputCurrentPassword) {
+    errors.push({ msg: "Please create a new password" });
+  }
+  if (errors.length > 0) {
+    res.render("change_password", {
+      errors,
+      title: "Log in",
+      req: req,
+    });
+  } else {
+    User.findOne({ $or: [{ username: InputUsername }] }).then((user) => {
+      if (user) {
+        bcrypt.compare(
+          InputCurrentPassword,
+          user.password,
+          function (err, result) {
+            if (err) {
+              res.render("change_password", {
+                error: err,
+                title: "Change Password",
+                req: req,
+              });
+              console.log(err);
+            }
+            if (result) {
+              bcrypt.hash(
+                InputNewPassword,
+                Number(process.env.SALTED_HASH),
+                function (err, hashedPass) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  const update = {
+                    username: InputUsername,
+                    password: hashedPass,
+                  };
+                  const options = { new: true };
+                  User.findByIdAndUpdate(user._id, update, options)
+                    .then((result) => {
+                      res.redirect("/");
+                    })
+                    .catch((err) => console.log(err));
+                }
+              );
+            } else {
+              res.render("change_password", {
+                error: "Current password does not matched",
+                title: "Change Password",
+                req: req,
+              });
+              console.log("Current password does not matched");
+            }
+          }
+        );
+      } else {
+        res.render("change_password", {
+          error: "User not found",
+          title: "Change Password",
+          req: req,
+        });
+        console.log("User not found");
+      }
+    });
+  }
+};
 exports.logout = (req, res, next) => {
   return res.clearCookie("token").then(res.redirect("/"));
 };
