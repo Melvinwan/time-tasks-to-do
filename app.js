@@ -35,7 +35,7 @@ app.use((req, res, next) => {
   const token = req.cookies.token;
   try {
     if (typeof token != "undefined") {
-      const data = jwt.verify(token, "verySecretValue");
+      const data = jwt.verify(token, process.env.JWT_SECRET);
       delete data.tasks;
       req.user = data;
     }

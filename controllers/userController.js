@@ -29,30 +29,34 @@ exports.postCreateaccount = (req, res, next) => {
       req: req,
     });
   } else {
-    bcrypt.hash(InputPassword, 13, function (err, hashedPass) {
-      if (err) {
-        console.log(err);
-      }
-      new User({
-        username: InputUsername,
-        password: hashedPass,
-      })
-        .save()
-        .then((result) => {
-          res.redirect("/mainpage");
+    bcrypt.hash(
+      InputPassword,
+      Number(process.env.SALTED_HASH),
+      function (err, hashedPass) {
+        if (err) {
+          console.log(err);
+        }
+        new User({
+          username: InputUsername,
+          password: hashedPass,
         })
-        .catch((err) => {
-          errors.push({ msg: "Username already exist" });
-          res.render("create_account", {
-            errors,
-            InputUsername,
-            InputPassword,
-            InputConfirmPassword,
-            title: "Log in",
-            req: req,
+          .save()
+          .then((result) => {
+            res.redirect("/mainpage");
+          })
+          .catch((err) => {
+            errors.push({ msg: "Username already exist" });
+            res.render("create_account", {
+              errors,
+              InputUsername,
+              InputPassword,
+              InputConfirmPassword,
+              title: "Log in",
+              req: req,
+            });
           });
-        });
-    });
+      }
+    );
   }
 };
 
